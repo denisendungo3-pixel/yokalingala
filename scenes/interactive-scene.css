@@ -1,0 +1,79 @@
+/* =====================================================================
+   YOKA LINGALA — STYLES DES SCÈNES INTERACTIVES
+   ===================================================================== */
+.ids-stage {
+  position: relative;
+  width: 100%;
+  line-height: 0;
+  border-radius: inherit;
+}
+.ids-img { display: block; width: 100%; height: auto; border-radius: inherit; }
+
+/* Zone cliquable : transparente, posée exactement sur la bulle */
+.ids-zone {
+  position: absolute;
+  margin: 0; padding: 0;
+  border: 0;
+  background: transparent;
+  border-radius: 16px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: box-shadow .2s, transform .2s, background-color .2s;
+}
+.ids-zone:hover { background-color: rgba(255, 255, 255, .10); box-shadow: 0 0 0 2px rgba(217, 164, 65, .55); }
+.ids-zone:focus-visible { outline: 3px solid #d9a441; outline-offset: 2px; }
+
+/* Petit indicateur 🔊, dans le coin de la bulle */
+.ids-badge {
+  position: absolute;
+  top: 0; right: 0;
+  transform: translate(45%, -55%);
+  min-width: 26px; height: 26px;
+  padding: 0 6px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(20, 30, 60, .25);
+  font-size: 13px; line-height: 1;
+  pointer-events: none;
+  transition: background-color .2s, transform .2s;
+}
+.ids-wave { display: none; align-items: flex-end; gap: 2px; height: 12px; }
+.ids-wave i { display: block; width: 3px; border-radius: 2px; background: #fff; animation: ids-eq .8s ease-in-out infinite; }
+.ids-wave i:nth-child(2) { animation-delay: -.25s; }
+.ids-wave i:nth-child(3) { animation-delay: -.5s; }
+@keyframes ids-eq { 0%, 100% { height: 4px; } 50% { height: 12px; } }
+
+/* Pendant le chargement */
+.ids-zone.is-loading .ids-badge { animation: ids-blink .7s ease-in-out infinite; }
+@keyframes ids-blink { 50% { opacity: .45; } }
+
+/* Pendant la lecture : halo doré qui respire + égaliseur */
+.ids-zone.is-playing {
+  background-color: rgba(217, 164, 65, .16);
+  box-shadow: 0 0 0 4px #d9a441, 0 0 0 10px rgba(217, 164, 65, .35);
+  animation: ids-pulse 1.1s ease-in-out infinite;
+  z-index: 2;
+}
+.ids-zone.is-playing .ids-badge { background: #1f4e9c; transform: translate(45%, -55%) scale(1.15); }
+.ids-zone.is-playing .ids-ico { display: none; }
+.ids-zone.is-playing .ids-wave { display: inline-flex; }
+@keyframes ids-pulse {
+  0%, 100% { box-shadow: 0 0 0 4px #d9a441, 0 0 0 7px rgba(217, 164, 65, .40); transform: scale(1); }
+  50%      { box-shadow: 0 0 0 4px #d9a441, 0 0 0 16px rgba(217, 164, 65, .12); transform: scale(1.03); }
+}
+
+/* Audio introuvable */
+.ids-zone.is-error { box-shadow: 0 0 0 3px #ce1126; }
+
+/* Petits écrans : badge plus petit pour ne pas cacher le texte */
+@media (max-width: 600px) {
+  .ids-badge { min-width: 18px; height: 18px; font-size: 9px; padding: 0 3px; transform: translate(50%, -60%); }
+  .ids-zone.is-playing .ids-badge { transform: translate(50%, -60%) scale(1.15); }
+  .ids-wave { height: 9px; } .ids-wave i { width: 2px; }
+  .ids-zone { border-radius: 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ids-zone, .ids-zone.is-playing, .ids-wave i, .ids-zone.is-loading .ids-badge { animation: none !important; transition: none !important; }
+}
